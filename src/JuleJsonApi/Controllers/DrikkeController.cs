@@ -45,6 +45,8 @@ namespace JuleJsonApi.Controllers
             {
                 return BadRequest();
             }
+            
+
             db.Drikker.Add(drikke);
             db.SaveChanges();
             return CreatedAtRoute("GetDrikke", new { id = drikke.DrikkeId }, drikke);

@@ -39,12 +39,20 @@ namespace JuleJsonApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Bruker bruker)
+        public IActionResult CreateOrLogin([FromBody] Bruker bruker)
         {
             if (bruker == null)
             {
                 return BadRequest();
             }
+            var eksisterendeBruker = db.Brukere.FirstOrDefault(b => b.Kode == bruker.Kode);
+            if(eksisterendeBruker != null)
+            {
+                eksisterendeBruker.Navn = bruker.Navn;
+                db.SaveChanges();
+                return Ok(eksisterendeBruker);
+            }
+
             db.Brukere.Add(bruker);
             db.SaveChanges();
             return CreatedAtRoute("GetBruker", new { id = bruker.BrukerId }, bruker);
